@@ -20,21 +20,24 @@ class makebins:
 		    sys.stdout.flush()
 
 	def engine(self):
-		with open("2001.csv","r") as f:
+		with open("2016.csv","r") as f:
 			reader = csv.reader(f)			#reading using CSV reader coz numpy doesn't read text 
-			row=next(reader)
-			for j in range(300000):
+			row=next(reader)				#skip the first row
+			count=0
+			for k in range(242480):
 				row=next(reader)
-				type=row[5]
+				type=row[6]
 				if self.data.get(type,-1)==-1:
 					self.data[type]=1
 				else:
 					self.data[type]+=1
-			self.drawProgressBar(j/300000)
+				count+=1
+				self.drawProgressBar(count/242480)
+
 		print('\n',self.data)
 		ofile=open('crime_types.txt','w')
 		for el in self.data.keys():
-			ofile.write(el+'\n')
+			ofile.write(el+', ')
 
 ux=makebins()
 ux.engine()
