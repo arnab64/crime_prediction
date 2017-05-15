@@ -9,7 +9,7 @@ class predict:
 		self.indata=np.loadtxt(infname,delimiter=',')
 		#print(self.indata.shape)	
 
-	def split_test_train(self):
+	def split_test_train(self,target=-3):
 		self.train_X=self.indata[:-1,:-3]
 		self.test_X=self.indata[-1:,:-3]		
 		self.train_y=self.indata[:-1,-3]
