@@ -24,7 +24,8 @@ class makebins:
 	def engine(self,countx):
 		with open("../prediction/allfiles/original_data_files/Chicago_Crimes_2012_to_2017.csv","r") as f:
 			reader = csv.reader(f)			#reading using CSV reader coz numpy doesn't read text 
-			row=next(reader)
+			headerrow=next(reader)
+			self.csvfile.writerow(headerrow)
 			for j in range(countx):
 				row=next(reader)
 				date_time=row[3]
