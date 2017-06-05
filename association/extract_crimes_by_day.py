@@ -40,10 +40,19 @@ class makebins:
 				self.drawProgressBar(j/countx)			#242480)
 
 	def extract_days(self,countx):
+		infile=open('listofcrimes.txt','r')
+		intext=infile.read()
+		crimes=intext.split(',')
+		positions={}
+		for j in range(len(crimes)):	#position of the crime
+			positions[crimes[j]]=j
+		countofcrimes={}
+		for	j in range(len(crimes)):	#initializing the numbers of each crime
+			countofcrimes[crimes[j]]=0	
 		with open("crime_2015.csv","r") as f:
 			reader = csv.reader(f)			#reading using CSV reader coz numpy doesn't read text 
 			headerrow=next(reader)
-			#self.csvfile.writerow(headerrow)
+			self.csvfile.writerow(crimes)
 			prev=None
 			listofcrimes=[]
 			day=1
@@ -57,14 +66,23 @@ class makebins:
 				time=date_time1[1]
 				timespl=time.split(':')
 				hour=int(timespl[0])
+				#print(j,"crime=",crime)
 				if date==prev:
-					if crime not in listofcrimes:
-						listofcrimes.append(crime)
+					countofcrimes[crime]+=1	
+					#print(countofcrimes)
 				else:
 					#listofcrimes.insert(0,day)
-					self.csvfile.writerow(listofcrimes)
+					#print(countofcrimes)
+					vectorx=[]
+					for j in range(len(crimes)):
+						crimex=crimes[j]
+						#print(crimex,countofcrimes[crimex])
+						vectorx.append(countofcrimes[crimex])
+						countofcrimes[crimex]=0
+					self.csvfile.writerow(vectorx)
+					#for	j in range(len(crimes)):	#initializing the numbers of each crime
+					#	countofcrimes[crimes[j]]=0									
 					day+=1
-					listofcrimes=[]
 				prev=date
 				'''
 				timeampm=date_time[2]
@@ -93,7 +111,22 @@ class makebins:
 					self.csvfile.writerow(listofcrimes)
 					'''
 				self.drawProgressBar(j/countx)			#242480)
-				
+
+	def get_all_crimes(self,countx):
+		ofile=open('listofcrimes.txt','w')
+		with open("crime_2015.csv","r") as f:
+			reader = csv.reader(f)			#reading using CSV reader coz numpy doesn't read text 
+			headerrow=next(reader)
+			listofcrimes=[]
+			for j in range(countx):
+				row=next(reader)		
+				crime=row[6]
+				if crime not in listofcrimes:
+					listofcrimes.append(crime)
+		for el in range(len(listofcrimes)):
+			ofile.write(listofcrimes[el]+',')
+
 ux=makebins()
 #ux.extract_crime_years(1456714)
+#ux.get_all_crimes(262995)
 ux.extract_days(262995)
